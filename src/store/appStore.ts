@@ -29,6 +29,6 @@ export const useAppStore = create<AppStore>()(
         })),
       clearRecentlyViewed: () => set({ recentlyViewed: [] }),
     }),
-    { name: 'clothrental-store' }
+    { name: 'pearls-clothing-collection-store' }
   )
 );

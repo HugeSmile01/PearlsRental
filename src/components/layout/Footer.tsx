@@ -12,7 +12,7 @@ export function Footer() {
                 <ShoppingBag className="w-4 h-4 text-white" />
               </div>
               <span className="font-display text-xl font-semibold text-white">
-                Cloth<span className="text-gold-400">Rental</span>
+                Pearl&apos;s <span className="text-gold-400">Collection</span>
               </span>
             </div>
             <p className="text-sm leading-relaxed text-obsidian-400 max-w-xs">
@@ -59,7 +59,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-obsidian-800 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-obsidian-500">
-          <p>© {new Date().getFullYear()} ClothRental. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Pearl's Clothing Collection. All rights reserved.</p>
           <p>Cash on pickup · No online payment required</p>
         </div>
       </div>

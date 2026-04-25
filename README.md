@@ -1,4 +1,4 @@
-# ClothRental — Premium Clothing Rental SaaS
+# Pearl's Clothing Collection — Premium Clothing Rental SaaS
 
 A modern, full-stack clothing rental platform built with Next.js 14, TypeScript, Tailwind CSS, Prisma, and SQLite.
 
@@ -67,8 +67,8 @@ Open [http://localhost:3000](http://localhost:3000)
 
 | Role  | Email                     | Password   |
 |-------|---------------------------|------------|
-| Admin | admin@clothrental.com     | admin123   |
-| User  | demo@clothrental.com      | user123    |
+| Admin | admin@pearlscollection.com     | admin123   |
+| User  | demo@pearlscollection.com      | user123    |
 
 Or use the **"Demo User"** / **"Demo Admin"** buttons on the login page.
 
@@ -152,6 +152,8 @@ prisma/
 - Set a strong `NEXTAUTH_SECRET` (32+ characters)
 - Configure `NEXTAUTH_URL` to your production domain
 - Images are stored as URLs (integrate Cloudinary/S3 for file uploads)
+- For Vercel, set these Environment Variables in the project settings: `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, and `RESERVATION_EXPIRY_HOURS`
+- The app now lives at the repository root (no nested `clothrental/` folder), so Vercel can deploy directly from this repo without a custom Root Directory
 
 ---
 

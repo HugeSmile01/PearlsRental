@@ -9,11 +9,11 @@ async function main() {
   // Create admin user
   const adminPassword = await bcrypt.hash('admin123', 10);
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@clothrental.com' },
+    where: { email: 'admin@pearlscollection.com' },
     update: {},
     create: {
       name: 'Admin User',
-      email: 'admin@clothrental.com',
+      email: 'admin@pearlscollection.com',
       password: adminPassword,
       role: Role.ADMIN,
     },
@@ -22,11 +22,11 @@ async function main() {
   // Create demo user
   const userPassword = await bcrypt.hash('user123', 10);
   const demoUser = await prisma.user.upsert({
-    where: { email: 'demo@clothrental.com' },
+    where: { email: 'demo@pearlscollection.com' },
     update: {},
     create: {
       name: 'Maria Santos',
-      email: 'demo@clothrental.com',
+      email: 'demo@pearlscollection.com',
       password: userPassword,
       role: Role.USER,
     },
@@ -38,7 +38,7 @@ async function main() {
     update: {},
     create: {
       id: 'main-location',
-      name: 'ClothRental Main Store',
+      name: 'Pearl's Clothing Collection Main Store',
       address: '123 Ayala Avenue, Makati City, Metro Manila, Philippines',
       latitude: 14.5547,
       longitude: 121.0244,
@@ -213,8 +213,8 @@ async function main() {
 
   console.log('✅ Seeding complete!');
   console.log('');
-  console.log('👤 Admin: admin@clothrental.com / admin123');
-  console.log('👤 Demo User: demo@clothrental.com / user123');
+  console.log('👤 Admin: admin@pearlscollection.com / admin123');
+  console.log('👤 Demo User: demo@pearlscollection.com / user123');
 }
 
 main()
