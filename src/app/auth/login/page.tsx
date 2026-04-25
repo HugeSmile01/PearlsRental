@@ -29,8 +29,8 @@ export default function LoginPage() {
   const demoLogin = async (role: 'user' | 'admin') => {
     setLoading(true);
     const creds = role === 'admin'
-      ? { email: 'admin@clothrental.com', password: 'admin123' }
-      : { email: 'demo@clothrental.com', password: 'user123' };
+      ? { email: 'admin@pearlscollection.com', password: 'admin123' }
+      : { email: 'demo@pearlscollection.com', password: 'user123' };
     const res = await signIn('credentials', { ...creds, redirect: false });
     setLoading(false);
     if (!res?.error) {
@@ -47,7 +47,7 @@ export default function LoginPage() {
             <div className="w-10 h-10 bg-gold-600 rounded-xl flex items-center justify-center">
               <ShoppingBag className="w-5 h-5 text-white" />
             </div>
-            <span className="font-display text-2xl font-semibold">Cloth<span className="text-gold-600">Rental</span></span>
+            <span className="font-display text-2xl font-semibold">Pearl&apos;s <span className="text-gold-600">Collection</span></span>
           </Link>
           <h1 className="font-display text-3xl font-semibold mb-2">Welcome back</h1>
           <p className="text-obsidian-500 text-sm">Sign in to manage your rentals</p>

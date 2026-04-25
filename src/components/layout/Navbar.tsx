@@ -36,7 +36,7 @@ export function Navbar() {
               <ShoppingBag className="w-4 h-4 text-white" />
             </div>
             <span className="font-display text-xl font-semibold text-obsidian-900 dark:text-white">
-              Cloth<span className="text-gold-600">Rental</span>
+              Pearl&apos;s <span className="text-gold-600">Collection</span>
             </span>
           </Link>
 
