@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-playfair: 'Playfair Display', Georgia, serif;
+  --font-dm-sans: 'DM Sans', system-ui, sans-serif;
+  --font-dm-mono: 'DM Mono', monospace;
+
+  --gold: #c99520;
+  --gold-light: #e2b52e;
+  --obsidian: #111111;
+  --cream: #faf8f3;
+}
+
+@layer base {
+  * {
+    @apply border-obsidian-200 dark:border-obsidian-700;
+  }
+
+  body {
+    @apply bg-cream dark:bg-obsidian-950 text-obsidian-900 dark:text-obsidian-100 font-body antialiased;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c99520' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .dark body {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e2b52e' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  h1, h2, h3 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-gold-600 hover:bg-gold-700 text-white font-body font-medium text-sm rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-gold-600/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent border border-obsidian-300 dark:border-obsidian-600 hover:border-gold-500 dark:hover:border-gold-500 text-obsidian-800 dark:text-obsidian-200 hover:text-gold-600 dark:hover:text-gold-400 font-body font-medium text-sm rounded-lg transition-all duration-200 active:scale-95;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-obsidian-600 dark:text-obsidian-400 hover:text-obsidian-900 dark:hover:text-obsidian-100 hover:bg-obsidian-100 dark:hover:bg-obsidian-800 font-body font-medium text-sm rounded-lg transition-all duration-200;
+  }
+
+  .card {
+    @apply bg-white dark:bg-obsidian-900 rounded-2xl border border-obsidian-100 dark:border-obsidian-800 shadow-sm hover:shadow-md transition-shadow duration-300;
+  }
+
+  .card-elevated {
+    @apply bg-white dark:bg-obsidian-900 rounded-2xl border border-obsidian-100 dark:border-obsidian-800 shadow-lg;
+  }
+
+  .input {
+    @apply w-full px-4 py-3 bg-white dark:bg-obsidian-800 border border-obsidian-200 dark:border-obsidian-700 rounded-xl text-sm text-obsidian-900 dark:text-obsidian-100 placeholder:text-obsidian-400 focus:outline-none focus:border-gold-500 focus:ring-2 focus:ring-gold-500/20 transition-all duration-200;
+  }
+
+  .label {
+    @apply block text-xs font-medium text-obsidian-500 dark:text-obsidian-400 uppercase tracking-wider mb-1.5;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium font-body;
+  }
+
+  .section-title {
+    @apply font-display text-3xl md:text-4xl font-semibold text-obsidian-900 dark:text-obsidian-50;
+  }
+
+  .gold-divider {
+    @apply w-12 h-0.5 bg-gold-500 rounded-full;
+  }
+
+  .skeleton {
+    @apply bg-obsidian-200 dark:bg-obsidian-700 rounded-lg animate-pulse;
+    background: linear-gradient(90deg, transparent 25%, rgba(255,255,255,0.15) 50%, transparent 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+}
+
+/* Leaflet map overrides */
+.leaflet-container {
+  font-family: var(--font-dm-sans) !important;
+  border-radius: 1rem;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0.75rem !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15) !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-obsidian-300 dark:bg-obsidian-600 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-obsidian-400 dark:bg-obsidian-500;
+}
+
+/* Animations */
+.animate-in {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Calendar overrides */
+.rdp {
+  --rdp-accent-color: theme('colors.gold.600');
+  --rdp-background-color: theme('colors.gold.50');
+  margin: 0 !important;
+}
+
+.rdp-day_selected, .rdp-day_selected:hover {
+  background-color: theme('colors.gold.600') !important;
+}
+
+.rdp-day_range_middle {
+  background-color: theme('colors.gold.100') !important;
+  color: theme('colors.gold.800') !important;
+}
