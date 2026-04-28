@@ -11,14 +11,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Missing params' }, { status: 400 });
   }
 
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || start > end) {
+    return NextResponse.json({ error: 'Invalid date range' }, { status: 400 });
+  }
+
   const conflict = await prisma.rental.findFirst({
     where: {
       productId,
-      status: { in: ['RESERVED_UNPAID', 'PICKED_UP_PAID'] },
-      AND: [
-        { startDate: { lte: new Date(endDate) } },
-        { endDate: { gte: new Date(startDate) } },
-      ],
+      status: { in: ['RESERVED_UNPAID', 'PICKED_UP_PAID', 'OVERDUE'] },
+      startDate: { lte: end },
+      endDate: { gte: start },
     },
   });
 

@@ -28,12 +28,16 @@ export default async function ProductPage({ params }: Props) {
 
   const parsed = {
     ...product,
+    createdAt: product.createdAt.toISOString(),
+    updatedAt: product.updatedAt.toISOString(),
     images: parseJsonField<string[]>(product.images),
     tags: parseJsonField<string[]>(product.tags),
   };
 
   const parsedRelated = related.map((r) => ({
     ...r,
+    createdAt: r.createdAt.toISOString(),
+    updatedAt: r.updatedAt.toISOString(),
     images: parseJsonField<string[]>(r.images),
     tags: parseJsonField<string[]>(r.tags),
   }));

@@ -1,4 +1,4 @@
-import { PrismaClient, Role, ProductStatus } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -15,7 +15,7 @@ async function main() {
       name: 'Admin User',
       email: 'admin@pearlscollection.com',
       password: adminPassword,
-      role: Role.ADMIN,
+      role: "ADMIN",
     },
   });
 
@@ -28,7 +28,7 @@ async function main() {
       name: 'Maria Santos',
       email: 'demo@pearlscollection.com',
       password: userPassword,
-      role: Role.USER,
+      role: "USER",
     },
   });
 
@@ -38,7 +38,7 @@ async function main() {
     update: {},
     create: {
       id: 'main-location',
-      name: 'Pearl's Clothing Collection Main Store',
+      name: "Pearl's Clothing Collection Main Store",
       address: '123 Ayala Avenue, Makati City, Metro Manila, Philippines',
       latitude: 14.5547,
       longitude: 121.0244,
@@ -56,7 +56,7 @@ async function main() {
   });
 
   // Products
-  const products = [
+  const products: any[] = [
     {
       name: 'Ivory Silk Evening Gown',
       slug: 'ivory-silk-evening-gown',
@@ -72,7 +72,7 @@ async function main() {
         'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800',
       ]),
       pricePerDay: 2500,
-      status: ProductStatus.AVAILABLE,
+      status: "AVAILABLE",
       tags: JSON.stringify(['gown', 'silk', 'evening', 'formal', 'wedding', 'ivory']),
     },
     {
@@ -90,7 +90,7 @@ async function main() {
         'https://images.unsplash.com/photo-1490144142486-4f8773ce58f3?w=800',
       ]),
       pricePerDay: 1800,
-      status: ProductStatus.AVAILABLE,
+      status: "AVAILABLE",
       tags: JSON.stringify(['suit', 'wool', 'formal', 'navy', 'business', 'wedding']),
     },
     {
@@ -108,7 +108,7 @@ async function main() {
         'https://images.unsplash.com/photo-1612336307429-8a898d10e223?w=800',
       ]),
       pricePerDay: 1200,
-      status: ProductStatus.AVAILABLE,
+      status: "AVAILABLE",
       tags: JSON.stringify(['dress', 'chiffon', 'cocktail', 'blush', 'semiformal']),
     },
     {
@@ -126,7 +126,7 @@ async function main() {
         'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800',
       ]),
       pricePerDay: 900,
-      status: ProductStatus.AVAILABLE,
+      status: "AVAILABLE",
       tags: JSON.stringify(['blazer', 'velvet', 'emerald', 'party', 'dinner']),
     },
     {
@@ -144,7 +144,7 @@ async function main() {
         'https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=800',
       ]),
       pricePerDay: 1500,
-      status: ProductStatus.RESERVED,
+      status: "RESERVED",
       tags: JSON.stringify(['dress', 'sequin', 'party', 'mini', 'gold', 'club']),
     },
     {
@@ -162,7 +162,7 @@ async function main() {
         'https://images.unsplash.com/photo-1548142813-c348350df52b?w=800',
       ]),
       pricePerDay: 2000,
-      status: ProductStatus.AVAILABLE,
+      status: "AVAILABLE",
       tags: JSON.stringify(['tuxedo', 'black', 'formal', 'blacktie', 'prom', 'gala']),
     },
     {
@@ -180,7 +180,7 @@ async function main() {
         'https://images.unsplash.com/photo-1603217192634-61068e4d4bf9?w=800',
       ]),
       pricePerDay: 1600,
-      status: ProductStatus.AVAILABLE,
+      status: "AVAILABLE",
       tags: JSON.stringify(['barong', 'tagalog', 'filipino', 'traditional', 'pina', 'wedding']),
     },
     {
@@ -198,7 +198,7 @@ async function main() {
         'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=800',
       ]),
       pricePerDay: 1100,
-      status: ProductStatus.AVAILABLE,
+      status: "AVAILABLE",
       tags: JSON.stringify(['dress', 'satin', 'red', 'wrap', 'cocktail', 'dinner']),
     },
   ];

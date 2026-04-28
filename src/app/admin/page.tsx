@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { redirect } from 'next/navigation';
@@ -65,12 +66,12 @@ export default function AdminPage() {
       {/* Header */}
       <div className="bg-obsidian-900 dark:bg-obsidian-950 pt-12 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-gold-400 text-xs uppercase tracking-widest mb-1">Admin Panel</p>
               <h1 className="font-display text-2xl font-semibold text-white">Dashboard</h1>
             </div>
-            <button onClick={() => { setEditProduct(null); setProductModal(true); }} className="btn-primary text-sm">
+            <button onClick={() => { setEditProduct(null); setProductModal(true); }} className="btn-primary text-sm whitespace-nowrap">
               <Plus className="w-4 h-4" />
               Add Product
             </button>
@@ -98,7 +99,7 @@ export default function AdminPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tabs */}
-        <div className="flex gap-1 bg-obsidian-100 dark:bg-obsidian-800 rounded-xl p-1 mb-8 w-fit">
+        <div className="flex gap-1 bg-obsidian-100 dark:bg-obsidian-800 rounded-xl p-1 mb-8 w-full sm:w-fit overflow-x-auto">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button key={id} onClick={() => setTab(id)}
               className={cn('flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200',
@@ -117,9 +118,11 @@ export default function AdminPage() {
               <div className="card p-5">
                 <h2 className="font-display text-lg font-semibold mb-4">Recent Rentals</h2>
                 <div className="space-y-3">
+                  {rentalsLoading && <p className="text-sm text-obsidian-400">Loading rentals...</p>}
+                  {!rentalsLoading && rentals.length === 0 && <p className="text-sm text-obsidian-400">No rentals yet.</p>}
                   {rentals.slice(0, 5).map((r) => (
                     <div key={r.id} className="flex items-center gap-3 py-2 border-b border-obsidian-100 dark:border-obsidian-800 last:border-0">
-                      {r.product?.images?.[0] && <img src={r.product.images[0]} alt="" className="w-10 h-12 object-cover rounded-lg shrink-0" />}
+                      {r.product?.images?.[0] && <Image src={r.product.images[0]} alt={r.product?.name || ''} width={40} height={48} className="w-10 h-12 object-cover rounded-lg shrink-0" />}
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">{r.product?.name}</p>
                         <p className="text-xs text-obsidian-400">{(r as any).user?.name} · {formatDate(r.createdAt)}</p>
@@ -133,11 +136,12 @@ export default function AdminPage() {
               <div className="card p-5">
                 <h2 className="font-display text-lg font-semibold mb-4">Most Rented</h2>
                 <div className="space-y-3">
+                  {!analytics?.mostRented?.length && <p className="text-sm text-obsidian-400">No rental trends yet.</p>}
                   {analytics?.mostRented?.map(({ product, count }: any, i: number) => (
                     product && (
                       <div key={product.id} className="flex items-center gap-3">
                         <span className="text-obsidian-300 dark:text-obsidian-600 font-mono text-sm w-5">{i + 1}</span>
-                        {product.images?.[0] && <img src={product.images[0]} alt="" className="w-10 h-12 object-cover rounded-lg shrink-0" />}
+                        {product.images?.[0] && <Image src={product.images[0]} alt={product.name} width={40} height={48} className="w-10 h-12 object-cover rounded-lg shrink-0" />}
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">{product.name}</p>
                           <p className="text-xs text-obsidian-400">{product.category}</p>
@@ -167,11 +171,13 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-obsidian-100 dark:divide-obsidian-800">
+                    {rentalsLoading && (<tr><td className="px-4 py-6 text-sm text-obsidian-400" colSpan={6}>Loading rentals...</td></tr>)}
+                    {!rentalsLoading && rentals.length === 0 && (<tr><td className="px-4 py-6 text-sm text-obsidian-400" colSpan={6}>No rentals found.</td></tr>)}
                     {rentals.map((r) => (
                       <tr key={r.id} className="hover:bg-obsidian-50 dark:hover:bg-obsidian-800/50 transition-colors">
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-3">
-                            {r.product?.images?.[0] && <img src={r.product.images[0]} alt="" className="w-8 h-10 object-cover rounded shrink-0" />}
+                            {r.product?.images?.[0] && <Image src={r.product.images[0]} alt={r.product?.name || ''} width={32} height={40} className="w-8 h-10 object-cover rounded shrink-0" />}
                             <span className="font-medium truncate max-w-[140px]">{r.product?.name}</span>
                           </div>
                         </td>
@@ -212,10 +218,12 @@ export default function AdminPage() {
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              {productsLoading && <p className="text-sm text-obsidian-400">Loading inventory...</p>}
+              {!productsLoading && products.length === 0 && <p className="text-sm text-obsidian-400">No products in inventory.</p>}
               {products.map((p) => (
                 <div key={p.id} className="card overflow-hidden group">
                   <div className="relative aspect-[3/4] overflow-hidden">
-                    <img src={p.images?.[0]} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <Image src={p.images?.[0]} alt={p.name} fill sizes="(max-width: 768px) 100vw, 25vw" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                     <div className="absolute top-2 left-2">
                       <span className={cn('badge text-xs', getStatusColor(p.status))}>{getStatusLabel(p.status)}</span>
                     </div>

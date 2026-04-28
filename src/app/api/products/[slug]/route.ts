@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { parseJsonField } from '@/lib/utils';
+import { requireAdmin } from '@/lib/authz';
+import { handleApiError, parseJsonOrThrow } from '@/lib/response';
+import { parseProductWrite } from '@/lib/validation';
 
 export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
   const product = await prisma.product.findUnique({
@@ -19,20 +22,25 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { slug: string } }) {
-  const body = await request.json();
+  try {
+    await requireAdmin();
+    const body = parseProductWrite(await parseJsonOrThrow(request));
 
-  const product = await prisma.product.update({
-    where: { slug: params.slug },
-    data: {
-      ...body,
-      images: JSON.stringify(body.images),
-      tags: JSON.stringify(body.tags),
-    },
-  });
+    const product = await prisma.product.update({
+      where: { slug: params.slug },
+      data: {
+        ...body,
+        images: JSON.stringify(body.images),
+        tags: JSON.stringify(body.tags),
+      },
+    });
 
-  return NextResponse.json({
-    ...product,
-    images: parseJsonField<string[]>(product.images),
-    tags: parseJsonField<string[]>(product.tags),
-  });
+    return NextResponse.json({
+      ...product,
+      images: parseJsonField<string[]>(product.images),
+      tags: parseJsonField<string[]>(product.tags),
+    });
+  } catch (error) {
+    return handleApiError(error);
+  }
 }

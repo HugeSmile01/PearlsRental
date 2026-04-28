@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -44,6 +44,8 @@ model Product {
   rentals       Rental[]
   favorites     Favorite[]
   recentlyViewed RecentlyViewed[]
+
+  @@index([status, category, createdAt])
 }
 
 enum ProductStatus {
@@ -54,7 +56,7 @@ enum ProductStatus {
 }
 
 model Rental {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   userId        String
   productId     String
   startDate     DateTime
@@ -62,11 +64,14 @@ model Rental {
   status        RentalStatus @default(RESERVED_UNPAID)
   notes         String?
   totalPrice    Float
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   expiresAt     DateTime
-  user          User      @relation(fields: [userId], references: [id])
-  product       Product   @relation(fields: [productId], references: [id])
+  user          User         @relation(fields: [userId], references: [id])
+  product       Product      @relation(fields: [productId], references: [id])
+
+  @@index([productId, status, startDate, endDate])
+  @@index([userId, createdAt])
 }
 
 enum RentalStatus {
