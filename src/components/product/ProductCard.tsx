@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Heart } from 'lucide-react';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
@@ -41,12 +42,13 @@ export function ProductCard({ product, isFavorited = false, onFavoriteToggle }: 
         {/* Image */}
         <div className="relative aspect-[3/4] bg-obsidian-100 dark:bg-obsidian-800 overflow-hidden">
           {image && !imgError ? (
-            <img
+            <Image
               src={image}
               alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
               onError={() => setImgError(true)}
-              loading="lazy"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">

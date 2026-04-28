@@ -10,6 +10,12 @@ module.exports = {
         mono: ['var(--font-dm-mono)', 'monospace'],
       },
       colors: {
+        cream: {
+          DEFAULT: '#fff7e8',
+          50: '#fffdf8',
+          100: '#fff7e8',
+          200: '#f9ecd2',
+        },
         gold: {
           50: '#fefdf7',
           100: '#fdf9e3',

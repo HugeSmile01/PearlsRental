@@ -10,7 +10,9 @@
     "db:push": "prisma db push",
     "db:seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts",
     "db:studio": "prisma studio",
-    "setup": "npm install && npx prisma db push && npm run db:seed"
+    "setup": "npm install && npx prisma db push && npm run db:seed",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/**/*.test.js"
   },
   "dependencies": {
     "@prisma/client": "^5.10.0",
