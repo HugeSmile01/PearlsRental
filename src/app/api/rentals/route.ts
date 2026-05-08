@@ -6,6 +6,7 @@ import { requireSession, isAdminSession } from '@/lib/authz';
 import { ApiError, handleApiError, parseJsonOrThrow } from '@/lib/response';
 import { parseRentalCreate } from '@/lib/validation';
 import { isRateLimited, rateLimitKey } from '@/lib/rate-limit';
+import { calculateRentalPrice, computeDemandFactor } from '@/lib/pricing';
 
 export async function GET() {
   try {
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
     const expiryHours = parseInt(process.env.RESERVATION_EXPIRY_HOURS || '24', 10);
 
     const rental = await prisma.$transaction(async (tx) => {
-      const product = await tx.product.findUnique({ where: { id: body.productId }, select: { id: true, pricePerDay: true } });
+      const product = await tx.product.findUnique({ where: { id: body.productId }, select: { id: true, pricePerDay: true, category: true } });
       if (!product) throw new ApiError(404, 'Product not found');
 
       const conflict = await tx.rental.findFirst({
@@ -89,6 +90,23 @@ export async function POST(request: NextRequest) {
       if (conflict) throw new ApiError(409, 'Product is not available for selected dates');
 
       const days = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1);
+      const [activeCategoryRentals, totalCategoryInventory] = await Promise.all([
+        tx.rental.count({
+          where: {
+            status: { in: ['RESERVED_UNPAID', 'PICKED_UP_PAID', 'OVERDUE'] },
+            product: { category: product.category },
+          },
+        }),
+        tx.product.count({ where: { category: product.category } }),
+      ]);
+
+      const demandFactor = computeDemandFactor(activeCategoryRentals, totalCategoryInventory);
+      const pricing = calculateRentalPrice({
+        baseDailyPrice: product.pricePerDay,
+        rentalDays: days,
+        demandFactor,
+      });
+
       const createdRental = await tx.rental.create({
         data: {
           userId,
@@ -97,7 +115,7 @@ export async function POST(request: NextRequest) {
           endDate: end,
           status: 'RESERVED_UNPAID',
           notes: body.notes,
-          totalPrice: product.pricePerDay * days,
+          totalPrice: pricing.total,
           expiresAt: addHours(new Date(), expiryHours),
         },
         include: {

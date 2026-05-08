@@ -157,6 +157,14 @@ prisma/
 
 ---
 
+## 📘 Architecture & Deliverables
+
+A comprehensive system design package (technical documentation, schema, API contract, wireframes, deployment/testing/maintenance strategy) is available at:
+
+- `docs/CLOTHING_RENTAL_SYSTEM_DESIGN.md`
+
+---
+
 ## 📜 Scripts
 
 ```bash
