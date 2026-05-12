@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/prisma';
 import { parseJsonField } from '@/lib/utils';
 import { LocationPageClient } from '@/components/map/LocationPageClient';

@@ -6,6 +6,7 @@ import { requireAdmin } from '@/lib/authz';
 import { ApiError, handleApiError, parseJsonOrThrow } from '@/lib/response';
 import { isRateLimited, rateLimitKey } from '@/lib/rate-limit';
 import { parseProductWrite } from '@/lib/validation';
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {

@@ -4,6 +4,7 @@ import { parseJsonField } from '@/lib/utils';
 import { requireAdmin } from '@/lib/authz';
 import { handleApiError, parseJsonOrThrow } from '@/lib/response';
 import { parseProductWrite } from '@/lib/validation';
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
   const product = await prisma.product.findUnique({

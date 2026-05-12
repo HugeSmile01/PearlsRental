@@ -9,12 +9,13 @@ const transitions: Record<RentalStatusValue, RentalStatusValue[]> = {
   CANCELLED: [],
   EXPIRED: [],
 };
-
-export function canTransitionRentalStatus(from: RentalStatusValue, to: RentalStatusValue) {
-  return from === to || transitions[from].includes(to);
+export function canTransitionRentalStatus(from: string, to: string) {
+  if (!from || !to) return false;
+  if (!(from in transitions)) return false;
+  return from === to || (transitions as any)[from].includes(to);
 }
 
-export function deriveProductStatusFromRental(rentalStatus: RentalStatusValue): ProductStatusValue {
+export function deriveProductStatusFromRental(rentalStatus: string): ProductStatusValue {
   switch (rentalStatus) {
     case 'PICKED_UP_PAID':
     case 'OVERDUE':

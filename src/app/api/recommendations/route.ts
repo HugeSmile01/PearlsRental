@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireSession } from '@/lib/authz';
+export const dynamic = 'force-dynamic';
 import { handleApiError } from '@/lib/response';
 import { scoreProduct } from '@/lib/recommendation';
 

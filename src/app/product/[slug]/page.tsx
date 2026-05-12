@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/prisma';
 import { parseJsonField } from '@/lib/utils';
 import { ProductDetail } from '@/components/product/ProductDetail';
@@ -42,5 +43,5 @@ export default async function ProductPage({ params }: Props) {
     tags: parseJsonField<string[]>(r.tags),
   }));
 
-  return <ProductDetail product={parsed} related={parsedRelated} />;
+  return <ProductDetail product={parsed as any} related={parsedRelated as any} />;
 }

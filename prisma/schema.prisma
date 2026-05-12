@@ -3,7 +3,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  // Default to SQLite for local development (`.env` uses file:./dev.db).
+  // For production deployments, switch this to `provider = "postgresql"`
+  // and set DATABASE_URL to a Postgres connection string.
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -12,17 +15,12 @@ model User {
   name          String
   email         String    @unique
   password      String
-  role          Role      @default(USER)
+  role          String    @default("USER")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   rentals       Rental[]
   favorites     Favorite[]
   recentlyViewed RecentlyViewed[]
-}
-
-enum Role {
-  USER
-  ADMIN
 }
 
 model Product {
@@ -37,7 +35,7 @@ model Product {
   occasion      String
   images        String    // JSON array of image URLs
   pricePerDay   Float
-  status        ProductStatus @default(AVAILABLE)
+  status        String    @default("AVAILABLE")
   tags          String    // JSON array of tags
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -48,20 +46,13 @@ model Product {
   @@index([status, category, createdAt])
 }
 
-enum ProductStatus {
-  AVAILABLE
-  RESERVED
-  RENTED
-  MAINTENANCE
-}
-
 model Rental {
   id            String       @id @default(cuid())
   userId        String
   productId     String
   startDate     DateTime
   endDate       DateTime
-  status        RentalStatus @default(RESERVED_UNPAID)
+  status        String    @default("RESERVED_UNPAID")
   notes         String?
   totalPrice    Float
   createdAt     DateTime     @default(now())
@@ -74,14 +65,7 @@ model Rental {
   @@index([userId, createdAt])
 }
 
-enum RentalStatus {
-  RESERVED_UNPAID
-  PICKED_UP_PAID
-  RETURNED
-  OVERDUE
-  CANCELLED
-  EXPIRED
-}
+
 
 model PickupLocation {
   id            String    @id @default(cuid())

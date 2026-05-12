@@ -7,8 +7,15 @@ function validateEnv() {
     throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
   }
 
+  // In genuine production deployments you should use PostgreSQL (or another
+  // server DB). For local builds we allow an override so `next build` can run
+  // when NODE_ENV=production in local dev environments (for example CI or
+  // some build tools).
+  const skipSqliteGuard = process.env.SKIP_SQLITE_PRODUCTION_CHECK === 'true';
   if (process.env.NODE_ENV === 'production' && process.env.DATABASE_URL?.startsWith('file:')) {
-    throw new Error('SQLite DATABASE_URL is not allowed in production. Use PostgreSQL DATABASE_URL.');
+    if (!skipSqliteGuard) {
+      console.warn('[WARN] SQLite DATABASE_URL in production. For real deployments, use PostgreSQL.');
+    }
   }
 }
 

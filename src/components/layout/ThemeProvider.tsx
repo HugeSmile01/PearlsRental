@@ -8,11 +8,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('light');
 
   useEffect(() => {
-    const stored = localStorage.getItem('theme') as Theme;
-    const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const t = stored || preferred;
-    setTheme(t);
-    document.documentElement.classList.toggle('dark', t === 'dark');
+    const storedTheme = localStorage.getItem('theme') as Theme | null;
+    const systemPreference = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    const chosenTheme = storedTheme || systemPreference;
+    setTheme(chosenTheme);
+    document.documentElement.classList.toggle('dark', chosenTheme === 'dark');
   }, []);
 
   const toggle = () => {

@@ -6,6 +6,7 @@ import { requireSession, isAdminSession } from '@/lib/authz';
 import { ApiError, handleApiError, parseJsonOrThrow } from '@/lib/response';
 import { parseRentalCreate } from '@/lib/validation';
 import { isRateLimited, rateLimitKey } from '@/lib/rate-limit';
+export const dynamic = 'force-dynamic';
 import { calculateRentalPrice, computeDemandFactor } from '@/lib/pricing';
 
 export async function GET() {

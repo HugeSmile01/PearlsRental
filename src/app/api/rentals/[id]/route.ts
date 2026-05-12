@@ -7,6 +7,8 @@ import { parseRentalUpdate } from '@/lib/validation';
 import { canTransitionRentalStatus, deriveProductStatusFromRental } from '@/lib/rental-state';
 import { isRateLimited, rateLimitKey } from '@/lib/rate-limit';
 
+export const dynamic = 'force-dynamic';
+
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const session = await requireSession();
