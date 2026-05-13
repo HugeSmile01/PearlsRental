@@ -19,10 +19,10 @@ export function HeroSection() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-gold-600/10 border border-gold-500/20 rounded-full px-4 py-1.5 mb-8">
             <Star className="w-3.5 h-3.5 text-gold-400 fill-gold-400" />
-            <span className="text-gold-300 text-xs font-medium tracking-wide uppercase">Premium Fashion Rental · Makati City</span>
+            <span className="text-gold-300 text-xs font-medium tracking-wide uppercase">Pearl's Curated Formalwear</span>
           </div>
 
-          <h1 className="font-display text-5xl md:text-7xl font-semibold text-white leading-[1.05] mb-6">
+          <h1 className="text-h1 text-white mb-6">
             Dress for the{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 to-gold-500">
               moment,
@@ -30,16 +30,16 @@ export function HeroSection() {
             <br />not forever.
           </h1>
 
-          <p className="text-lg text-obsidian-300 leading-relaxed mb-10 max-w-xl">
+          <p className="text-body text-obsidian-300 mb-10 max-w-xl">
             Reserve designer gowns, suits, and formal wear online. Pick up at our Makati store and pay in cash. No subscriptions. No surprises.
           </p>
 
           <div className="flex flex-wrap gap-4 mb-16">
-            <Link href="/catalog" className="btn-primary text-base px-8 py-4">
+            <Link href="/catalog" className="btn-primary btn-lg">
               Browse Collection
               <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/auth/register" className="btn-secondary text-base px-8 py-4 border-white/20 text-white hover:border-gold-500">
+            <Link href="/auth/register" className="btn-secondary btn-lg border-white/20 text-white hover:border-gold-500">
               Create Account
             </Link>
           </div>
