@@ -101,3 +101,31 @@ npm run setup
 UI conventions
 
 - See `docs/UI_CONVENTIONS.md` for button, typography, token, and spacing guardrails.
+
+## Supabase backend migration
+
+The project now includes a Supabase-first backend path for authentication and core rental tables.
+
+### Required environment variables
+
+```env
+NEXT_PUBLIC_SUPABASE_URL="https://<project-id>.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="<anon-key>"
+SUPABASE_SERVICE_ROLE_KEY="<service-role-key>"
+```
+
+### Apply schema and RLS policies
+
+1. Open Supabase SQL Editor.
+2. Run `supabase-schema.sql` from the repository root.
+3. Verify policies are enabled for `profiles`, `products`, and `bookings`.
+
+### Storage
+
+Create a `product-images` public bucket in Supabase Storage for catalog media.
+
+### Current app wiring
+
+- Login and registration use Supabase Auth from client pages.
+- Schema and RLS policies are provided in `supabase-schema.sql` for core rental data.
+- Existing Prisma APIs remain available during incremental migration.
