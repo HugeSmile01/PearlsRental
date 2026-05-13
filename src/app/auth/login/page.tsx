@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { supabaseSignIn } from '@/lib/supabase';
 import Link from 'next/link';
 import { ShoppingBag, Eye, EyeOff, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -16,10 +16,10 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const res = await signIn('credentials', { email, password, redirect: false });
+    const { error } = await supabaseSignIn(email, password);
     setLoading(false);
-    if (res?.error) {
-      toast.error('Invalid email or password');
+    if (error) {
+      toast.error(error.message || 'Invalid email or password');
     } else {
       toast.success('Welcome back!');
       router.push('/dashboard');
@@ -31,11 +31,13 @@ export default function LoginPage() {
     const creds = role === 'admin'
       ? { email: 'admin@pearlscollection.com', password: 'admin123' }
       : { email: 'demo@pearlscollection.com', password: 'user123' };
-    const res = await signIn('credentials', { ...creds, redirect: false });
+    const { error } = await supabaseSignIn(creds.email, creds.password);
     setLoading(false);
-    if (!res?.error) {
+    if (!error) {
       toast.success(`Logged in as ${role}`);
       router.push(role === 'admin' ? '/admin' : '/dashboard');
+    } else {
+      toast.error(error.message || 'Demo login failed');
     }
   };
 

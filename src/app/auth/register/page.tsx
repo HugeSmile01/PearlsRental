@@ -1,8 +1,8 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { supabaseSignIn, supabaseSignUp } from '@/lib/supabase';
 import Link from 'next/link';
-import { signIn } from 'next-auth/react';
 import { ShoppingBag, Eye, EyeOff, UserPlus } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -19,15 +19,15 @@ export default function RegisterPage() {
     if (password.length < 6) { toast.error('Password must be at least 6 characters'); return; }
     setLoading(true);
     try {
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) { toast.error(data.error || 'Registration failed'); setLoading(false); return; }
-      await signIn('credentials', { email, password, redirect: false });
-      toast.success('Account created! Welcome!');
+      const { error } = await supabaseSignUp(name, email, password);
+
+      if (error) {
+        toast.error(error.message || 'Registration failed');
+        setLoading(false);
+        return;
+      }
+
+      toast.success('Account created! Check your email verification if required.');
       router.push('/dashboard');
     } catch {
       toast.error('Something went wrong');
