@@ -9,8 +9,8 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="py-24 bg-white dark:bg-obsidian-900 border-y border-obsidian-100 dark:border-obsidian-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 md:py-24 bg-white dark:bg-obsidian-900 border-y border-obsidian-100 dark:border-obsidian-800">
+      <div className="section">
         <div className="text-center mb-16">
           <p className="text-gold-600 text-sm font-medium uppercase tracking-widest mb-3">Simple Process</p>
           <h2 className="section-title mb-4">How It Works</h2>
@@ -28,7 +28,7 @@ export function HowItWorks() {
                 </span>
               </div>
               <h3 className="font-display text-lg font-semibold mb-2">{title}</h3>
-              <p className="text-sm text-obsidian-500 dark:text-obsidian-400 leading-relaxed">{desc}</p>
+              <p className="text-sm leading-6 text-obsidian-500 dark:text-obsidian-400">{desc}</p>
             </div>
           ))}
         </div>

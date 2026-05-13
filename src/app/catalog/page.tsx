@@ -43,8 +43,8 @@ export default function CatalogPage() {
     <div className="pt-16 min-h-screen">
       {/* Header */}
       <div className="bg-obsidian-900 dark:bg-obsidian-950 pt-16 pb-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="font-display text-4xl md:text-5xl font-semibold text-white mb-2">
+        <div className="section">
+          <h1 className="text-h2 text-white mb-2">
             {category || 'Full Catalog'}
           </h1>
           <p className="text-obsidian-400">{products?.length ?? '...'} pieces available</p>
@@ -73,7 +73,7 @@ export default function CatalogPage() {
                 key={cat}
                 onClick={() => setCategory(cat === 'All' ? '' : cat)}
                 className={cn(
-                  'px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200',
+                  'h-9 px-4 rounded-full text-sm font-medium border transition-all duration-200',
                   (cat === 'All' && !category) || cat === category
                     ? 'bg-gold-600 border-gold-600 text-white'
                     : 'border-obsidian-200 dark:border-obsidian-700 text-obsidian-600 dark:text-obsidian-400 hover:border-gold-400'
@@ -96,7 +96,7 @@ export default function CatalogPage() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="input py-2 text-sm w-auto"
+              className="input text-sm w-auto min-w-44"
             >
               <option value="newest">Newest First</option>
               <option value="price_asc">Price: Low to High</option>
@@ -110,20 +110,20 @@ export default function CatalogPage() {
           <div className="card p-5 mb-6 grid grid-cols-2 md:grid-cols-4 gap-4 animate-in">
             <div>
               <label className="label">Size</label>
-              <select value={size} onChange={(e) => setSize(e.target.value === 'All' ? '' : e.target.value)} className="input py-2 text-sm">
+              <select value={size} onChange={(e) => setSize(e.target.value === 'All' ? '' : e.target.value)} className="input text-sm">
                 {SIZES.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
             <div>
               <label className="label">Availability</label>
-              <select value={status} onChange={(e) => setStatus(e.target.value === 'All' ? '' : e.target.value)} className="input py-2 text-sm">
+              <select value={status} onChange={(e) => setStatus(e.target.value === 'All' ? '' : e.target.value)} className="input text-sm">
                 {STATUSES.map((s) => <option key={s} value={s}>{s === 'All' ? 'All' : s === 'AVAILABLE' ? 'Available' : 'Reserved'}</option>)}
               </select>
             </div>
             <div className="flex items-end">
               <button
                 onClick={() => { setSize(''); setStatus(''); setSearch(''); setCategory(''); }}
-                className="btn-ghost text-sm text-red-500"
+                className="btn-danger btn-sm"
               >
                 <X className="w-3.5 h-3.5" />
                 Clear filters

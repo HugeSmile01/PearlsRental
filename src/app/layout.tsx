@@ -6,7 +6,7 @@ import { Footer } from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: {
-    default: "Pearl's Clothing Collection — Premium Fashion Rental",
+    default: "Pearl's Clothing Collection — Designer Formalwear",
     template: "%s | Pearl's Clothing Collection",
   },
   description: 'Rent designer clothing and formal wear for any occasion. Premium fashion rental with cash on pickup.',

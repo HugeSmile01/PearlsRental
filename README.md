@@ -97,3 +97,7 @@ npm run db:seed
 npm run db:studio
 npm run setup
 ```
+
+UI conventions
+
+- See `docs/UI_CONVENTIONS.md` for button, typography, token, and spacing guardrails.
