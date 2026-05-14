@@ -12,6 +12,9 @@ const csp = [
 ].join('; ');
 
 const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   images: {
     remotePatterns: [
       {

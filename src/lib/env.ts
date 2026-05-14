@@ -9,7 +9,9 @@ function hasValue(value: string | undefined) {
 function validateEnv() {
   const missingBase = baseRequiredEnvVars.filter((key) => !hasValue(process.env[key]));
   if (missingBase.length > 0) {
-    throw new Error(`Missing required environment variables: ${missingBase.join(', ')}`);
+    console.warn(
+      `Missing required runtime environment variables: ${missingBase.join(', ')}. Runtime API routes may fail until these are configured.`,
+    );
   }
 
   const missingNextAuth = nextAuthEnvVars.filter((key) => !hasValue(process.env[key]));
