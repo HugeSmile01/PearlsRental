@@ -1,3 +1,5 @@
+import { PHASE_PRODUCTION_BUILD } from 'next/constants';
+
 const baseRequiredEnvVars = ['DATABASE_URL'] as const;
 const nextAuthEnvVars = ['NEXTAUTH_SECRET', 'NEXTAUTH_URL'] as const;
 const supabaseEnvVars = ['NEXT_PUBLIC_SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_ANON_KEY'] as const;
@@ -7,8 +9,11 @@ function hasValue(value: string | undefined) {
 }
 
 function validateEnv() {
-  if (process.env.NEXT_PHASE === 'phase-production-build') {
-    const missingBase = baseRequiredEnvVars.filter((key) => !hasValue(process.env[key]));
+  const missingBase = baseRequiredEnvVars.filter((key) => !hasValue(process.env[key]));
+  const isBuildPhase =
+    process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD || process.env.NEXT_PHASE === 'phase-production-build';
+
+  if (isBuildPhase) {
     if (missingBase.length > 0) {
       console.warn(
         `[WARN] Build phase missing runtime environment variables: ${missingBase.join(', ')}. Runtime API routes may fail until these are configured.`,
@@ -16,8 +21,6 @@ function validateEnv() {
     }
     return;
   }
-
-  const missingBase = baseRequiredEnvVars.filter((key) => !hasValue(process.env[key]));
   if (missingBase.length > 0) {
     throw new Error(`Missing required environment variables: ${missingBase.join(', ')}`);
   }
