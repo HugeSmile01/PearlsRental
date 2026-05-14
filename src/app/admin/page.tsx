@@ -60,6 +60,8 @@ export default function AdminPage() {
   ];
 
   const RENTAL_STATUSES = ['RESERVED_UNPAID', 'PICKED_UP_PAID', 'RETURNED', 'OVERDUE', 'CANCELLED'];
+  const overdueCount = rentals.filter((r) => r.status === 'OVERDUE').length;
+  const unpaidCount = rentals.filter((r) => r.status === 'RESERVED_UNPAID').length;
 
   return (
     <div className="pt-16 min-h-screen">
@@ -113,6 +115,23 @@ export default function AdminPage() {
         {/* Overview */}
         {tab === 'overview' && (
           <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="card p-4">
+                <p className="text-xs uppercase tracking-wider text-obsidian-400">Ops Attention</p>
+                <p className="font-display text-xl font-semibold mt-1">{overdueCount}</p>
+                <p className="text-sm text-red-500">Overdue rentals need follow-up.</p>
+              </div>
+              <div className="card p-4">
+                <p className="text-xs uppercase tracking-wider text-obsidian-400">Pending Pickup</p>
+                <p className="font-display text-xl font-semibold mt-1">{unpaidCount}</p>
+                <p className="text-sm text-amber-600">Reserved but unpaid.</p>
+              </div>
+              <div className="card p-4">
+                <p className="text-xs uppercase tracking-wider text-obsidian-400">Catalog Health</p>
+                <p className="font-display text-xl font-semibold mt-1">{products.length}</p>
+                <p className="text-sm text-obsidian-500">Active styles in inventory.</p>
+              </div>
+            </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Recent rentals */}
               <div className="card p-5">

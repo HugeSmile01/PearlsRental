@@ -37,6 +37,11 @@ export default function DashboardPage() {
 
   const active = rentals.filter((r) => ['RESERVED_UNPAID', 'PICKED_UP_PAID'].includes(r.status));
   const past = rentals.filter((r) => !['RESERVED_UNPAID', 'PICKED_UP_PAID'].includes(r.status));
+  const unpaid = rentals.filter((r) => r.status === 'RESERVED_UNPAID');
+  const amountAtRisk = unpaid.reduce((sum, r) => sum + r.totalPrice, 0);
+  const upcomingPickup = active
+    .slice()
+    .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())[0];
 
   const tabs: { id: Tab; label: string; icon: any; count?: number }[] = [
     { id: 'rentals', label: 'My Rentals', icon: Package, count: rentals.length },
@@ -148,6 +153,28 @@ export default function DashboardPage() {
         {/* Tab content */}
         {tab === 'rentals' && (
           <div className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="card p-4">
+                <p className="text-xs uppercase tracking-wider text-obsidian-400">Next Pickup</p>
+                <p className="font-display text-lg font-semibold mt-1">
+                  {upcomingPickup ? formatDate(upcomingPickup.startDate) : 'No upcoming pickup'}
+                </p>
+                <p className="text-sm text-obsidian-400 mt-1 line-clamp-1">{upcomingPickup?.product?.name || 'Browse catalog to reserve your next look.'}</p>
+              </div>
+              <div className="card p-4">
+                <p className="text-xs uppercase tracking-wider text-obsidian-400">Awaiting Pickup</p>
+                <p className="font-display text-lg font-semibold mt-1">{unpaid.length} reservations</p>
+                <p className="text-sm text-amber-600 mt-1">{formatCurrency(amountAtRisk)} reserved and unpaid</p>
+              </div>
+              <div className="card p-4">
+                <p className="text-xs uppercase tracking-wider text-obsidian-400">Quick Actions</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <Link href="/catalog" className="badge">Browse</Link>
+                  <Link href="/location" className="badge">Pickup Location</Link>
+                  <Link href="/dashboard" onClick={() => setTab('favorites')} className="badge">Wishlist</Link>
+                </div>
+              </div>
+            </div>
             {/* Active */}
             <div>
               <h2 className="font-display text-xl font-semibold mb-4 flex items-center gap-2">
