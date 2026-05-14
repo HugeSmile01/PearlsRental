@@ -1,20 +1,20 @@
-import { getServerSession } from 'next-auth';
-import { Session } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { ApiError } from '@/lib/response';
+import { getServerSupabaseSession } from '@/lib/supabase';
 
 export async function requireSession() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSupabaseSession();
   if (!session?.user) throw new ApiError(401, 'Unauthorized');
   return session;
 }
 
 export async function requireAdmin() {
   const session = await requireSession();
-  if ((session.user as any).role !== 'ADMIN') throw new ApiError(403, 'Forbidden');
+  const role = session.user.app_metadata?.role || session.user.user_metadata?.role;
+  if (role !== 'ADMIN') throw new ApiError(403, 'Forbidden');
   return session;
 }
 
-export function isAdminSession(session: Session | null) {
-  return (session?.user as any)?.role === 'ADMIN';
+export function isAdminSession(session: any) {
+  const role = session?.user?.app_metadata?.role || session?.user?.user_metadata?.role;
+  return role === 'ADMIN';
 }

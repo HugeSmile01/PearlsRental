@@ -1,9 +1,9 @@
 'use client';
-import { SessionProvider } from 'next-auth/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'react-hot-toast';
 import { ThemeProvider } from './ThemeProvider';
 import { useState } from 'react';
+import { AuthProvider } from './AuthProvider';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -11,7 +11,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   }));
 
   return (
-    <SessionProvider>
+    <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           {children}
@@ -34,6 +34,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           />
         </ThemeProvider>
       </QueryClientProvider>
-    </SessionProvider>
+    </AuthProvider>
   );
 }

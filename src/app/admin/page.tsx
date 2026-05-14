@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/components/layout/AuthProvider';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { redirect } from 'next/navigation';
 import {
@@ -16,14 +16,14 @@ import { AdminProductModal } from '@/components/admin/AdminProductModal';
 type Tab = 'overview' | 'rentals' | 'inventory';
 
 export default function AdminPage() {
-  const { data: session, status } = useSession();
+  const { user: session, loading } = useAuth();
   const [tab, setTab] = useState<Tab>('overview');
   const [productModal, setProductModal] = useState(false);
   const [editProduct, setEditProduct] = useState<any>(null);
   const qc = useQueryClient();
 
-  if (status === 'loading') return null;
-  if (status === 'unauthenticated' || (session?.user as any)?.role !== 'ADMIN') redirect('/');
+  if (loading) return null;
+  if (!session || (session?.user as any)?.role !== 'ADMIN') redirect('/');
 
   const { data: analytics } = useQuery({
     queryKey: ['admin-analytics'],

@@ -1,13 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSession, signOut } from 'next-auth/react';
+import { useAuth } from '@/components/layout/AuthProvider';
 import { ShoppingBag, Menu, X, Sun, Moon, Heart, User, LayoutDashboard, LogOut } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { cn } from '@/lib/utils';
 
 export function Navbar() {
-  const { data: session } = useSession();
+  const { user: session, signOut } = useAuth();
   const { theme, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

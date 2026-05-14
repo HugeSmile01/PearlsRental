@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabaseSignIn } from '@/lib/supabase';
+
 import Link from 'next/link';
 import { ShoppingBag, Eye, EyeOff, LogIn } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -16,10 +16,11 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabaseSignIn(email, password);
+    const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
     setLoading(false);
-    if (error) {
-      toast.error(error.message || 'Invalid email or password');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      toast.error(err.error || 'Invalid email or password');
     } else {
       toast.success('Welcome back!');
       router.push('/dashboard');
@@ -31,13 +32,14 @@ export default function LoginPage() {
     const creds = role === 'admin'
       ? { email: 'admin@pearlscollection.com', password: 'admin123' }
       : { email: 'demo@pearlscollection.com', password: 'user123' };
-    const { error } = await supabaseSignIn(creds.email, creds.password);
+    const res = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(creds) });
     setLoading(false);
-    if (!error) {
+    if (res.ok) {
       toast.success(`Logged in as ${role}`);
       router.push(role === 'admin' ? '/admin' : '/dashboard');
     } else {
-      toast.error(error.message || 'Demo login failed');
+      const err = await res.json().catch(() => ({}));
+      toast.error(err.error || 'Demo login failed');
     }
   };
 
