@@ -33,6 +33,11 @@ DATABASE_URL="file:./dev.db"
 NEXTAUTH_SECRET="your-super-secret-key"
 NEXTAUTH_URL="http://localhost:3000"
 RESERVATION_EXPIRY_HOURS=24
+NEXT_PUBLIC_SUPABASE_URL="https://<project-id>.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="<anon-key>"
+# optional (currently not used by app runtime)
+SUPABASE_SERVICE_ROLE_KEY=""
+SKIP_SQLITE_PRODUCTION_CHECK=true
 ```
 
 Database setup (development)
@@ -68,12 +73,35 @@ src/
 prisma/
 ├── schema.prisma           # Database schema
 └── seed.ts                 # Demo seed data
+supabase-schema.sql         # Optional Supabase schema + RLS reference script
 ```
+
+## Runtime architecture (current)
+
+- **Data/API backend:** Prisma + Next.js App Router API routes.
+- **Authorization for protected APIs:** NextAuth session checks.
+- **Client login/register UI:** Supabase auth requests from auth pages.
+- **Current state:** hybrid wiring during migration, not a full Supabase-only backend.
+
+### Implemented API routes
+
+- `GET /api/products`
+- `GET /api/products/[slug]`, `PUT /api/products/[slug]` (admin)
+- `GET /api/rentals`, `POST /api/rentals`
+- `PATCH /api/rentals/[id]`, `DELETE /api/rentals/[id]`
+- `GET /api/rentals/availability`
+- `POST /api/admin/products`, `DELETE /api/admin/products`
+- `GET /api/admin/analytics`
+- `GET /api/user/favorites`, `POST /api/user/favorites`
+- `GET /api/locations`
+- `GET /api/recommendations`
+- `GET /api/health`
+- `GET/POST /api/auth/[...nextauth]`
 
 Database models
 
 - User — id, name, email, password, role
-- Product — id, slug, name, category, size, color, images[], pricePerDay, status
+- Product — id, slug, name, category, size, color, `images` (JSON string), `tags` (JSON string), pricePerDay, status
 - Rental — userId, productId, startDate, endDate, status, totalPrice, expiresAt
 - PickupLocation — lat, lng, address, openingHours, notes
 - Favorite — userId, productId
@@ -89,6 +117,9 @@ Scripts
 
 ```bash
 npm run dev
+npm run lint        # TypeScript check (tsc --noEmit)
+npm run typecheck   # TypeScript check (tsc --noEmit)
+npm test
 npm run build
 npm run start
 npm run start:prod
@@ -102,19 +133,20 @@ UI conventions
 
 - See `docs/UI_CONVENTIONS.md` for button, typography, token, and spacing guardrails.
 
-## Supabase backend migration
+## Supabase integration status
 
-The project now includes a Supabase-first backend path for authentication and core rental tables.
+Supabase is currently used by client auth pages, while protected application APIs still rely on NextAuth session authorization and Prisma data access.
 
-### Required environment variables
+### Environment variables
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL="https://<project-id>.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="<anon-key>"
+# optional (currently not used in runtime code)
 SUPABASE_SERVICE_ROLE_KEY="<service-role-key>"
 ```
 
-### Apply schema and RLS policies
+### Optional schema and RLS reference
 
 1. Open Supabase SQL Editor.
 2. Run `supabase-schema.sql` from the repository root.
@@ -127,5 +159,6 @@ Create a `product-images` public bucket in Supabase Storage for catalog media.
 ### Current app wiring
 
 - Login and registration use Supabase Auth from client pages.
-- Schema and RLS policies are provided in `supabase-schema.sql` for core rental data.
-- Existing Prisma APIs remain available during incremental migration.
+- Protected routes and API authorization use NextAuth sessions.
+- Prisma remains the active data layer for the main `/api/*` routes.
+- Schema and RLS policies in `supabase-schema.sql` are maintained as migration/reference material.

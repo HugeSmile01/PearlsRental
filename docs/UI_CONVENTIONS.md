@@ -20,4 +20,4 @@ Use semantic tokens and utility classes only (`.btn-*`, `.input`, `.section-titl
 - Prefer 4/6/8 spacing rhythm and avoid one-off arbitrary spacing unless required for responsiveness.
 
 ## Guardrails
-Run `npm run lint` before merge. If adding new UI variants, extend shared classes in `globals.css` rather than component-local inline styles.
+Run `npm run lint` (TypeScript check) and `npm test` before merge. If adding new UI variants, extend shared classes in `globals.css` rather than component-local inline styles. Note: production builds currently skip ESLint (`next.config.js` sets `eslint.ignoreDuringBuilds`).
