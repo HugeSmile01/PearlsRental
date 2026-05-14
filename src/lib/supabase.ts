@@ -1,5 +1,4 @@
 import '@/lib/env';
-import { cookies } from 'next/headers';
 
 const ACCESS_COOKIE = 'sb-access-token';
 
@@ -44,14 +43,6 @@ export async function getSupabaseUserFromToken(token: string) {
   });
   if (!response.ok) return null;
   return (await response.json()) as SupabaseSessionUser;
-}
-
-export async function getServerSupabaseSession() {
-  const token = (await cookies()).get(ACCESS_COOKIE)?.value;
-  if (!token) return null;
-  const user = await getSupabaseUserFromToken(token);
-  if (!user) return null;
-  return { user, accessToken: token };
 }
 
 export const supabaseAccessCookie = ACCESS_COOKIE;

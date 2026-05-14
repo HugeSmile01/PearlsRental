@@ -1,5 +1,5 @@
 import { ApiError } from '@/lib/response';
-import { getServerSupabaseSession } from '@/lib/supabase';
+import { getServerSupabaseSession } from '@/lib/supabase-server';
 
 export async function requireSession() {
   const session = await getServerSupabaseSession();
