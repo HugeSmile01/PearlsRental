@@ -1,14 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { parseJsonField } from '@/lib/utils';
+import { requireAdmin, requireSession } from '@/lib/authz';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  const userId = (session.user as any).id;
+  const session = await requireSession();
+    const userId = session.user.id;
 
   const favorites = await prisma.favorite.findMany({
     where: { userId },
@@ -27,9 +25,8 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  const userId = (session.user as any).id;
+  const session = await requireSession();
+    const userId = session.user.id;
   const { productId } = await request.json();
 
   const existing = await prisma.favorite.findUnique({ where: { userId_productId: { userId, productId } } });

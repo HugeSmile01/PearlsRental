@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabaseSignIn, supabaseSignUp } from '@/lib/supabase';
+import { supabaseSignUp } from '@/lib/supabase';
 import Link from 'next/link';
 import { ShoppingBag, Eye, EyeOff, UserPlus } from 'lucide-react';
 import toast from 'react-hot-toast';

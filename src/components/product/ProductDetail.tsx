@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/components/layout/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
@@ -21,7 +21,7 @@ interface Props {
 }
 
 export function ProductDetail({ product, related }: Props) {
-  const { data: session } = useSession();
+  const { user: session } = useAuth();
   const router = useRouter();
   const [activeImg, setActiveImg] = useState(0);
   const [zoomed, setZoomed] = useState(false);

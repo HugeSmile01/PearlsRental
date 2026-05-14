@@ -96,7 +96,7 @@ supabase-schema.sql         # Optional Supabase schema + RLS reference script
 - `GET /api/locations`
 - `GET /api/recommendations`
 - `GET /api/health`
-- `GET/POST /api/auth/[...nextauth]`
+- `POST /api/auth/login, POST /api/auth/logout, GET /api/auth/session`
 
 Database models
 
@@ -110,7 +110,7 @@ Database models
 Production notes
 
 - For production, switch Prisma datasource to PostgreSQL and set `DATABASE_URL` accordingly.
-- Set a strong `NEXTAUTH_SECRET` (32+ characters) and configure `NEXTAUTH_URL`.
+- Configure `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` for Supabase auth/session APIs.
 - Use an object store or CDN for images in production.
 
 Scripts

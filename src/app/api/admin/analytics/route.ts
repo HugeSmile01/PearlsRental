@@ -1,15 +1,12 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { parseJsonField } from '@/lib/utils';
+import { requireAdmin, requireSession } from '@/lib/authz';
 
 export const dynamic = 'force-dynamic';
 export async function GET() {
-  const session = await getServerSession(authOptions);
-  if ((session?.user as any)?.role !== 'ADMIN') {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const session = await requireSession();
+  await requireAdmin();
 
   const [totalRentals, activeRentals, totalRevenue, products, recentRentals] = await Promise.all([
     prisma.rental.count(),

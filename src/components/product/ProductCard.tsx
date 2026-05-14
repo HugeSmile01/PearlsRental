@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Heart } from 'lucide-react';
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/components/layout/AuthProvider';
 import { cn, formatCurrency, getStatusColor, getStatusLabel } from '@/lib/utils';
 import type { Product } from '@/types';
 import toast from 'react-hot-toast';
@@ -15,7 +15,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, isFavorited = false, onFavoriteToggle }: ProductCardProps) {
-  const { data: session } = useSession();
+  const { user: session } = useAuth();
   const [imgError, setImgError] = useState(false);
   const [favorited, setFavorited] = useState(isFavorited);
 

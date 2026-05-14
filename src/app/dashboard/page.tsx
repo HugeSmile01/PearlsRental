@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/components/layout/AuthProvider';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
@@ -12,7 +12,7 @@ import toast from 'react-hot-toast';
 type Tab = 'rentals' | 'favorites' | 'profile';
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession();
+  const { user: session, loading } = useAuth();
   const [tab, setTab] = useState<Tab>('rentals');
   const qc = useQueryClient();
 
