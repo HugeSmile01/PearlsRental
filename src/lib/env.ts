@@ -10,13 +10,12 @@ function hasValue(value: string | undefined) {
 
 function validateEnv() {
   const missingBase = baseRequiredEnvVars.filter((key) => !hasValue(process.env[key]));
-  const isBuildPhase =
-    process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD || process.env.NEXT_PHASE === 'phase-production-build';
+  const isBuildPhase = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD;
 
   if (isBuildPhase) {
     if (missingBase.length > 0) {
       console.warn(
-        `[WARN] Build phase missing runtime environment variables: ${missingBase.join(', ')}. Runtime API routes may fail until these are configured.`,
+        `Build phase missing runtime environment variables: ${missingBase.join(', ')}. Runtime API routes may fail until these are configured.`,
       );
     }
     return;
