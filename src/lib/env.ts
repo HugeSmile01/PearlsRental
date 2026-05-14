@@ -8,6 +8,12 @@ function hasValue(value: string | undefined) {
 
 function validateEnv() {
   if (process.env.NEXT_PHASE === 'phase-production-build') {
+    const missingBase = baseRequiredEnvVars.filter((key) => !hasValue(process.env[key]));
+    if (missingBase.length > 0) {
+      console.warn(
+        `[WARN] Build phase missing runtime environment variables: ${missingBase.join(', ')}. Runtime API routes may fail until these are configured.`,
+      );
+    }
     return;
   }
 
