@@ -7,6 +7,10 @@ function hasValue(value: string | undefined) {
 }
 
 function validateEnv() {
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    return;
+  }
+
   const missingBase = baseRequiredEnvVars.filter((key) => !hasValue(process.env[key]));
   if (missingBase.length > 0) {
     throw new Error(`Missing required environment variables: ${missingBase.join(', ')}`);
