@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const [tab, setTab] = useState<Tab>('rentals');
   const qc = useQueryClient();
 
-  if (status === 'unauthenticated') redirect('/auth/login');
+  if (!loading && !session) redirect('/auth/login');
 
   const { data: rentals = [], isLoading: rentalsLoading } = useQuery<Rental[]>({
     queryKey: ['my-rentals'],
