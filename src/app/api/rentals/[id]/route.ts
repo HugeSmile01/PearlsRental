@@ -4,7 +4,7 @@ import { parseJsonField } from '@/lib/utils';
 import { requireSession, isAdminSession } from '@/lib/authz';
 import { ApiError, handleApiError, parseJsonOrThrow } from '@/lib/response';
 import { parseRentalUpdate } from '@/lib/validation';
-import { canTransitionRentalStatus, deriveProductStatusFromRental } from '@/lib/rental-state';
+import { canTransitionRentalStatus, deriveProductStatusFromActiveRentals } from '@/lib/rental-state';
 import { isRateLimited, rateLimitKey } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
@@ -40,9 +40,17 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         },
       });
 
+      const remainingActiveRentals = await tx.rental.findMany({
+        where: {
+          productId: rental.productId,
+          status: { in: ['RESERVED_UNPAID', 'PICKED_UP_PAID', 'OVERDUE'] },
+        },
+        select: { status: true },
+      });
+
       await tx.product.update({
         where: { id: rental.productId },
-        data: { status: deriveProductStatusFromRental(status) },
+        data: { status: deriveProductStatusFromActiveRentals(remainingActiveRentals.map((entry) => entry.status)) },
       });
 
       return next;
@@ -80,7 +88,19 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
     await prisma.$transaction(async (tx) => {
       await tx.rental.update({ where: { id: params.id }, data: { status: 'CANCELLED' } });
-      await tx.product.update({ where: { id: rental.productId }, data: { status: 'AVAILABLE' } });
+
+      const remainingActiveRentals = await tx.rental.findMany({
+        where: {
+          productId: rental.productId,
+          status: { in: ['RESERVED_UNPAID', 'PICKED_UP_PAID', 'OVERDUE'] },
+        },
+        select: { status: true },
+      });
+
+      await tx.product.update({
+        where: { id: rental.productId },
+        data: { status: deriveProductStatusFromActiveRentals(remainingActiveRentals.map((entry) => entry.status)) },
+      });
     });
 
     return NextResponse.json({ success: true });

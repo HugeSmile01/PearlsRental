@@ -30,3 +30,15 @@ export function deriveProductStatusFromRental(rentalStatus: string): ProductStat
       return 'AVAILABLE';
   }
 }
+
+export function deriveProductStatusFromActiveRentals(statuses: string[]): ProductStatusValue {
+  if (statuses.some((status) => status === 'PICKED_UP_PAID' || status === 'OVERDUE')) {
+    return 'RENTED';
+  }
+
+  if (statuses.some((status) => status === 'RESERVED_UNPAID')) {
+    return 'RESERVED';
+  }
+
+  return 'AVAILABLE';
+}
