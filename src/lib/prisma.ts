@@ -1,14 +1,20 @@
-import { PrismaClient, Prisma } from '@prisma/client';
 import '@/lib/env';
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
-
-const prismaClientConfig: Prisma.PrismaClientOptions = {
-  log: process.env.NODE_ENV === 'production' ? ['error', 'warn'] : ['query', 'error', 'warn'],
-};
-
-export const prisma = globalForPrisma.prisma ?? new PrismaClient(prismaClientConfig);
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+/**
+ * Temporary Prisma compatibility shim.
+ *
+ * This repository is migrating to Supabase-only data access, but some routes
+ * still import `prisma`. We keep this proxy so the app can compile without the
+ * `@prisma/client` package present.
+ */
+export const prisma = new Proxy(
+  {},
+  {
+    get(_target, property) {
+      throw new Error(
+        `Prisma client is not available. Attempted to access prisma.${String(property)}. ` +
+          'Migrate this call to Supabase data access.'
+      );
+    },
+  }
+) as any;

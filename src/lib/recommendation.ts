@@ -1,4 +1,10 @@
-import type { Product } from '@prisma/client';
+type ProductLike = {
+  id: string;
+  category: string;
+  color: string;
+  occasion: string;
+  status: 'AVAILABLE' | 'RESERVED' | 'MAINTENANCE' | string;
+};
 
 export type RecommendationSignals = {
   recentlyViewedIds?: string[];
@@ -7,7 +13,7 @@ export type RecommendationSignals = {
   preferredOccasions?: string[];
 };
 
-export function scoreProduct(product: Product, signals: RecommendationSignals) {
+export function scoreProduct(product: ProductLike, signals: RecommendationSignals) {
   let score = 0;
 
   if (signals.recentlyViewedIds?.includes(product.id)) score += 2;

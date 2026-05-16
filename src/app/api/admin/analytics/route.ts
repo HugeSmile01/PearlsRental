@@ -28,11 +28,11 @@ export async function GET() {
     take: 5,
   });
 
-  const topProductIds = rentalCounts.map((r) => r.productId);
+  const topProductIds = (rentalCounts as any[]).map((r: any) => r.productId);
   const topProducts = await prisma.product.findMany({ where: { id: { in: topProductIds } } });
 
-  const mostRented = rentalCounts.map((rc) => {
-    const product = topProducts.find((p) => p.id === rc.productId);
+  const mostRented = (rentalCounts as any[]).map((rc: any) => {
+    const product = (topProducts as any[]).find((p: any) => p.id === rc.productId);
     return {
       product: product
         ? { ...product, images: parseJsonField<string[]>(product.images), tags: parseJsonField<string[]>(product.tags) }
@@ -50,7 +50,7 @@ export async function GET() {
     totalProducts: products.length,
     mostRented,
     inventoryByStatus,
-    recentRentals: recentRentals.map((r) => ({
+    recentRentals: (recentRentals as any[]).map((r: any) => ({
       ...r,
       product: r.product
         ? { ...r.product, images: parseJsonField<string[]>(r.product.images), tags: parseJsonField<string[]>(r.product.tags) }
