@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/components/layout/AuthProvider';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Package, Heart, User, Bell, Calendar, Clock, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
 import { cn, formatCurrency, formatDate, getStatusColor, getStatusLabel } from '@/lib/utils';
@@ -15,8 +15,12 @@ export default function DashboardPage() {
   const { user: session, loading } = useAuth();
   const [tab, setTab] = useState<Tab>('rentals');
   const qc = useQueryClient();
+  const router = useRouter();
 
-  if (!loading && !session) redirect('/auth/login');
+  if (!loading && !session) {
+    router.replace('/auth/login');
+    return null;
+  }
 
   const { data: rentals = [], isLoading: rentalsLoading } = useQuery<Rental[]>({
     queryKey: ['my-rentals'],
