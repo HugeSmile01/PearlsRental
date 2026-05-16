@@ -5,7 +5,7 @@ PearlsRental is a clothing rental platform built with Next.js 14, TypeScript, Ta
 ## Supabase-first architecture
 
 - Authentication: Supabase Auth
-- Database: Supabase Postgres (via `DATABASE_URL`)
+- Database: Supabase Postgres
 - API layer: Next.js App Router routes
 
 ## Quick start
@@ -19,7 +19,6 @@ npm install
 2. Configure environment variables
 
 ```env
-DATABASE_URL="postgresql://..."   # Supabase Postgres connection string
 NEXT_PUBLIC_SUPABASE_URL="https://<project-id>.supabase.co"
 NEXT_PUBLIC_SUPABASE_ANON_KEY="<anon-key>"
 SUPABASE_SERVICE_ROLE_KEY="<service-role-key>"
