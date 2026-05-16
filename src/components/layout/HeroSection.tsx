@@ -16,12 +16,7 @@ export function HeroSection() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 pt-40">
         <div className="max-w-3xl">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-gold-600/10 border border-gold-500/20 rounded-full px-4 py-1.5 mb-8">
-            <Star className="w-3.5 h-3.5 text-gold-400 fill-gold-400" />
-            <span className="text-gold-300 text-xs font-medium tracking-wide uppercase">Pearl's Curated Formalwear</span>
-          </div>
-
+ 
           <h1 className="text-h1 text-white mb-6">
             Dress for the{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 to-gold-500">
