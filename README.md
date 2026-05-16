@@ -1,6 +1,6 @@
 # PearlsRental
 
-PearlsRental is a clothing rental platform built with Next.js 14, TypeScript, Tailwind CSS, **Supabase Authentication**, and a **Supabase PostgreSQL** database.
+PearlsRental is a clothing rental platform built with Next.js 14.1, React 18, TypeScript, Tailwind CSS, **Supabase Authentication**, and a **Supabase PostgreSQL** database.
 
 ## Supabase-first architecture
 
@@ -47,7 +47,7 @@ npm run typecheck
 npm test
 ```
 
-## Notes
+## Notes (verified May 16, 2026)
 
 - Local SQLite setup has been removed from project defaults.
 - NextAuth environment references have been removed; authentication is Supabase-based.
