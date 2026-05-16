@@ -29,7 +29,7 @@ RESERVATION_EXPIRY_HOURS=24
 3. Apply schema to Supabase
 
 - Option A (recommended): Use Supabase migrations/SQL Editor with `supabase-schema.sql`.
-- Option B: Use Prisma migrations against the Supabase Postgres URL.
+- Option B: Apply `supabase-schema.sql` with your preferred Postgres client (psql, migration runner, or Supabase CLI).
 
 4. Run development server
 
@@ -52,3 +52,4 @@ npm test
 
 - Local SQLite setup has been removed from project defaults.
 - NextAuth environment references have been removed; authentication is Supabase-based.
+- Prisma is no longer part of the default toolchain.
