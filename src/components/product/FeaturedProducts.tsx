@@ -8,7 +8,12 @@ import type { Product } from '@/types';
 export function FeaturedProducts() {
   const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ['products', 'featured'],
-    queryFn: () => fetch('/api/products?featured=true').then((r) => r.json()),
+    queryFn: async () => {
+      const response = await fetch('/api/products?featured=true');
+      if (!response.ok) return [];
+      const payload = await response.json();
+      return Array.isArray(payload) ? payload : [];
+    },
   });
 
   return (

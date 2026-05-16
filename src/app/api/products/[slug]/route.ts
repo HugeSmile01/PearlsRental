@@ -1,25 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { parseJsonField } from '@/lib/utils';
 import { requireAdmin } from '@/lib/authz';
 import { handleApiError, parseJsonOrThrow } from '@/lib/response';
 import { parseProductWrite } from '@/lib/validation';
+import { getProductBySlug, updateProductBySlug } from '@/lib/products';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
-  const product = await prisma.product.findUnique({
-    where: { slug: params.slug },
-  });
+  const result = await getProductBySlug(params.slug);
+  if (!result.ok) return NextResponse.json({ error: result.error }, { status: 500 });
 
-  if (!product) {
+  if (!result.data) {
     return NextResponse.json({ error: 'Product not found' }, { status: 404 });
   }
 
-  return NextResponse.json({
-    ...product,
-    images: parseJsonField<string[]>(product.images),
-    tags: parseJsonField<string[]>(product.tags),
-  });
+  return NextResponse.json(result.data);
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { slug: string } }) {
@@ -27,20 +21,11 @@ export async function PUT(request: NextRequest, { params }: { params: { slug: st
     await requireAdmin();
     const body = parseProductWrite(await parseJsonOrThrow(request));
 
-    const product = await prisma.product.update({
-      where: { slug: params.slug },
-      data: {
-        ...body,
-        images: JSON.stringify(body.images),
-        tags: JSON.stringify(body.tags),
-      },
-    });
+    const result = await updateProductBySlug(params.slug, body);
+    if (!result.ok) return NextResponse.json({ error: result.error }, { status: 500 });
+    if (!result.data) return NextResponse.json({ error: 'Product not found' }, { status: 404 });
 
-    return NextResponse.json({
-      ...product,
-      images: parseJsonField<string[]>(product.images),
-      tags: parseJsonField<string[]>(product.tags),
-    });
+    return NextResponse.json(result.data);
   } catch (error) {
     return handleApiError(error);
   }

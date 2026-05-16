@@ -34,7 +34,12 @@ export default function CatalogPage() {
 
   const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ['products', search, category, size, status, sortBy],
-    queryFn: () => fetch(`/api/products?${params}`).then((r) => r.json()),
+    queryFn: async () => {
+      const response = await fetch(`/api/products?${params}`);
+      if (!response.ok) return [];
+      const payload = await response.json();
+      return Array.isArray(payload) ? payload : [];
+    },
   });
 
   const hasFilters = search || category || size || status;
