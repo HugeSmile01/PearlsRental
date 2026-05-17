@@ -1,47 +1,28 @@
 export const dynamic = 'force-dynamic';
-import { prisma } from '@/lib/prisma';
-import { parseJsonField } from '@/lib/utils';
 import { ProductDetail } from '@/components/product/ProductDetail';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { getProductBySlug, getRelatedProducts } from '@/lib/products';
 
 interface Props {
   params: { slug: string };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const product = await prisma.product.findUnique({ where: { slug: params.slug } });
-  if (!product) return { title: 'Not Found' };
+  const result = await getProductBySlug(params.slug);
+  if (!result.ok || !result.data) return { title: 'Not Found' };
   return {
-    title: product.name,
-    description: product.description,
+    title: result.data.name,
+    description: result.data.description,
   };
 }
 
 export default async function ProductPage({ params }: Props) {
-  const product = await prisma.product.findUnique({ where: { slug: params.slug } });
-  if (!product) notFound();
+  const productResult = await getProductBySlug(params.slug);
+  if (!productResult.ok || !productResult.data) notFound();
 
-  const related = await prisma.product.findMany({
-    where: { category: product.category, id: { not: product.id } },
-    take: 4,
-  });
-
-  const parsed = {
-    ...product,
-    createdAt: product.createdAt.toISOString(),
-    updatedAt: product.updatedAt.toISOString(),
-    images: parseJsonField<string[]>(product.images),
-    tags: parseJsonField<string[]>(product.tags),
-  };
-
-  const parsedRelated = related.map((r) => ({
-    ...r,
-    createdAt: r.createdAt.toISOString(),
-    updatedAt: r.updatedAt.toISOString(),
-    images: parseJsonField<string[]>(r.images),
-    tags: parseJsonField<string[]>(r.tags),
-  }));
-
-  return <ProductDetail product={parsed as any} related={parsedRelated as any} />;
+  const product = productResult.data!;
+  const relatedResult = await getRelatedProducts(product.category, product.id, 4);
+  const related = relatedResult.ok ? relatedResult.data : [];
+  return <ProductDetail product={product} related={related} />;
 }
